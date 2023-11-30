@@ -1,13 +1,18 @@
 import controllers.NoteAPI
+import controllers.MenuAPI
 import models.Item
+import models.Menu
 import models.Note
+import utils.MenuColorManager
 import utils.ScannerInput.readNextChar
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
+import utils.ScannerInput
 import kotlin.system.exitProcess
 
+private val menuAPI = MenuAPI()
 private val noteAPI = NoteAPI()
-
+val menuColorManager = MenuColorManager()
 fun main() = runMenu()
 
 fun runMenu() {
@@ -21,8 +26,9 @@ fun runMenu() {
             6 -> addItemToNote()
             7 -> updateItemContentsInNote()
             8 -> deleteAnItem()
-            9 -> markItemStatus()
-            10 -> searchNotes()
+            9 -> changeMenu()
+            10 -> markItemStatus()
+            11 -> searchNotes()
             15 -> searchItems()
             16 -> listToDoItems()
             0 -> exitApp()
@@ -31,46 +37,37 @@ fun runMenu() {
     } while (true)
 }
 
-fun mainMenu() = readNextInt(
+fun mainMenu(): Int { return ScannerInput.readNextInt(menuColorManager.getColoredMenu(
         """ 
-         > -----------------------------------------------------  
-         > |                  NOTE KEEPER APP                  |
-         > -----------------------------------------------------  
-         > | NOTE MENU                                         |
-         > |   1) Add a note                                   |
-         > |   2) List notes                                   |
-         > |   3) Update a note                                |
-         > |   4) Delete a note                                |
-         > |   5) Archive a note                               |
-         > -----------------------------------------------------  
-         > | ITEM MENU                                         | 
-         > |   6) Add item to a note                           |
-         > |   7) Update item contents on a note               |
-         > |   8) Delete item from a note                      |
-         > |   9) Mark item as complete/todo                   | 
-         > -----------------------------------------------------  
-         > | REPORT MENU FOR NOTES                             | 
-         > |   10) Search for all notes (by note title)        |
-         > |   11) .....                                       |
-         > |   12) .....                                       |
-         > |   13) .....                                       |
-         > |   14) .....                                       |
-         > -----------------------------------------------------  
-         > | REPORT MENU FOR ITEMS                             |                                
-         > |   15) Search for all items (by item description)  |
-         > |   16) List TODO Items                             |
-         > |   17) .....                                       |
-         > |   18) .....                                       |
-         > |   19) .....                                       |
-         > -----------------------------------------------------  
-         > |   0) Exit                                         |
-         > -----------------------------------------------------  
-         > ==>> """.trimMargin(">")
-    )
+> ---------------------------------------------------------------------------------
+| / __ \     _____ _ _                            _   _   _       _        / __ \ |
+|/ /  \ \   |  ___(_) | __ _ _ __ ___   ___ _ __ | |_| | | |_   _| |__    / /  \ \|
+|\ \__/ /   | |_  | | |/ _` | '_ ` _ \ / _ \ '_ \| __| |_| | | | | '_ \   \ \__/ /|
+| \____/    |  _| | | | (_| | | | | | |  __/ | | | |_|  _  | |_| | |_) |   \____/ |
+| /    \    |_|   |_|_|\__,_|_| |_| |_|\___|_| |_|\__|_| |_|\__,_|_.__/    /    \ |
+|---------------------------------------------------------------------------------| 
+|                               FILAMENT CATALOG APP                              |
+|---------------------------------------------------------------------------------|  
+| FILAMENT MENU                                                                   |
+|   1) Add a Filament                                                             |
+|   2) List Filaments                                                             |
+|   3) Update Filament                                                            |
+|   4) Delete Filament                                                            |
+|   5) Search Filaments                                                           |
+|---------------------------------------------------------------------------------|
+| CATALOG MENU                                                                    |
+|   6) View All Filaments                                                         |
+|   7) View Filaments by Category                                                 |
+|   8) View Filaments by Brand                                                    |
+----------------------------------------------------------------------------------|
+| SETTINGS                                                                        |
+|   9) App Settings                                                               |
+-----------------------------------------------------------------------------------
+> ==>> 
+ """.trimMargin(">")
+    ))
+}
 
-//------------------------------------
-//NOTE MENU
-//------------------------------------
 fun addNote() {
     val noteTitle = readNextLine("Enter a title for the note: ")
     val notePriority = readNextInt("Enter a priority (1-low, 2, 3, 4, 5-high): ")
@@ -223,6 +220,19 @@ fun markItemStatus() {
                         item.isItemComplete = true
                 }
        }
+    }
+}
+
+fun changeMenu(){
+    //logger.info { "changeColour() function invoked" }
+    val colorChoice = readNextLine("Enter the name of a Color: ")
+    menuColorManager.changeColor(colorChoice)
+    val isChanged = menuAPI.change(Menu(colorChoice))
+
+    if (isChanged) {
+        println("Change Successfully")
+    } else {
+        println("Change Failed")
     }
 }
 
