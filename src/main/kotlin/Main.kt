@@ -1,44 +1,40 @@
-import controllers.NoteAPI
+
 import controllers.MenuAPI
-import models.Item
+import controllers.FilamentApi
+import models.Filament
 import models.Menu
-import models.Note
 import utils.MenuColorManager
-import utils.ScannerInput.readNextChar
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
 import utils.ScannerInput
 import kotlin.system.exitProcess
 
+private val filamentApi = FilamentApi()
 private val menuAPI = MenuAPI()
-private val noteAPI = NoteAPI()
 val menuColorManager = MenuColorManager()
 fun main() = runMenu()
 
 fun runMenu() {
     do {
         when (val option = mainMenu()) {
-            1 -> addNote()
-            2 -> listNotes()
-            3 -> updateNote()
-            4 -> deleteNote()
-            5 -> archiveNote()
-            6 -> addItemToNote()
-            7 -> updateItemContentsInNote()
-            8 -> deleteAnItem()
-            9 -> changeMenu()
-            10 -> markItemStatus()
-            11 -> searchNotes()
-            15 -> searchItems()
-            16 -> listToDoItems()
+            1 -> addFilament()
+            2 -> listFilaments()
+            3 -> updateFilament()
+            4 -> deleteFilament()
+            5 -> searchFilamentBrand()
+            6 -> searchFilamentType()
+           // 7 -> AddPrintProperty()
+           // 8 -> updateProperty()
+           // 9 ->deleteProperty()
+            //10 -> sortCatalogueByBrand()
+            11 -> changeMenu()
             0 -> exitApp()
             else -> println("Invalid menu choice: $option")
         }
     } while (true)
 }
-
-fun mainMenu(): Int { return ScannerInput.readNextInt(menuColorManager.getColoredMenu(
-        """ 
+fun mainMenu(): Int { return readNextInt(menuColorManager.getColoredMenu(
+    """ 
 > ---------------------------------------------------------------------------------
 | / __ \     _____ _ _                            _   _   _       _        / __ \ |
 |/ /  \ \   |  ___(_) | __ _ _ __ ___   ___ _ __ | |_| | | |_   _| |__    / /  \ \|
@@ -53,26 +49,30 @@ fun mainMenu(): Int { return ScannerInput.readNextInt(menuColorManager.getColore
 |   2) List Filaments                                                             |
 |   3) Update Filament                                                            |
 |   4) Delete Filament                                                            |
-|   5) Search Filaments                                                           |
+|   5) Search Filament by Brand                                                   |
+|   6) Search Filament by Type                                                    |
 |---------------------------------------------------------------------------------|
 | CATALOG MENU                                                                    |
-|   6) View All Filaments                                                         |
-|   7) View Filaments by Category                                                 |
-|   8) View Filaments by Brand                                                    |
+|   7) Add a Print Property                                                       |
+|   8) Update a Print Property                                                    | 
+|   9) Delete a Print Property                                                    |
+|  10) Sort Catalogue by Brand                                                    |
 ----------------------------------------------------------------------------------|
 | SETTINGS                                                                        |
-|   9) App Settings                                                               |
+|   11) change menu color                                                         |
 -----------------------------------------------------------------------------------
 > ==>> 
  """.trimMargin(">")
-    ))
+))
 }
-
-fun addNote() {
-    val noteTitle = readNextLine("Enter a title for the note: ")
-    val notePriority = readNextInt("Enter a priority (1-low, 2, 3, 4, 5-high): ")
-    val noteCategory = readNextLine("Enter a category for the note: ")
-    val isAdded = noteAPI.add(Note(noteTitle = noteTitle, notePriority = notePriority, noteCategory = noteCategory))
+fun addFilament() {
+    val filamentBrand = readNextLine("Enter the brand of filament: ")
+    val filamentType = readNextLine("Enter the type of filament (PLA,TPU,PETG,ABS, etc): ")
+    val filamentColor = readNextLine("Enter the color of filament: ")
+    val filamentQuantity = readNextInt("Enter the quantity of filament: ")
+    val filamentWeight = readNextLine("Enter the weight of filament (0.5/1/3/5 kg):  ")
+    val filamentPrice = readNextInt("Enter the price of filament: ")
+    val isAdded = filamentApi.add(Filament(filamentBrand = filamentBrand, filamentType = filamentType, filamentColor = filamentColor, filamentQuantity = filamentQuantity, filamentWeight = filamentWeight, filamentPrice = filamentPrice))
 
     if (isAdded) {
         println("Added Successfully")
@@ -81,145 +81,67 @@ fun addNote() {
     }
 }
 
-fun listNotes() {
-    if (noteAPI.numberOfNotes() > 0) {
-        val option = readNextInt(
-            """
-                  > --------------------------------
-                  > |   1) View ALL notes          |
-                  > |   2) View ACTIVE notes       |
-                  > |   3) View ARCHIVED notes     |
-                  > --------------------------------
-         > ==>> """.trimMargin(">")
-        )
 
-        when (option) {
-            1 -> listAllNotes()
-            2 -> listActiveNotes()
-            3 -> listArchivedNotes()
-            else -> println("Invalid option entered: $option")
-        }
-    } else {
-        println("Option Invalid - No notes stored")
-    }
+fun listFilaments() {
+    println(filamentApi.listAllFilaments())
 }
+fun updateFilament(){
+    listFilaments()
+    if (filamentApi.numberOfFilaments() > 0) {
 
-fun listAllNotes() = println(noteAPI.listAllNotes())
-fun listActiveNotes() = println(noteAPI.listActiveNotes())
-fun listArchivedNotes() = println(noteAPI.listArchivedNotes())
+        val id = readNextInt("Enter the id of the filament to update: ")
+        if (filamentApi.findFilament(id) != null) {
+            val filamentBrand = readNextLine("Enter the brand of filament: ")
+            val filamentType = readNextLine("Enter the type of filament: ")
+            val filamentColor = readNextLine("Enter the color of filament: ")
+            val filamentQuantity = readNextInt("Enter the quantity of filament: ")
+            val filamentWeight = readNextLine("Enter the weight of filament: ")
+            val filamentPrice = readNextInt("Enter the price of filament: ")
 
-fun updateNote() {
-    listNotes()
-    if (noteAPI.numberOfNotes() > 0) {
-        // only ask the user to choose the note if notes exist
-        val id = readNextInt("Enter the id of the note to update: ")
-        if (noteAPI.findNote(id) != null) {
-            val noteTitle = readNextLine("Enter a title for the note: ")
-            val notePriority = readNextInt("Enter a priority (1-low, 2, 3, 4, 5-high): ")
-            val noteCategory = readNextLine("Enter a category for the note: ")
 
-            // pass the index of the note and the new note details to NoteAPI for updating and check for success.
-            if (noteAPI.update(id, Note(0, noteTitle, notePriority, noteCategory, false))){
+            if (filamentApi.update(id, Filament(0, filamentBrand, filamentType, filamentColor, filamentQuantity, filamentWeight, filamentPrice))){
                 println("Update Successful")
             } else {
                 println("Update Failed")
             }
         } else {
-            println("There are no notes for this index number")
+            println("Filament not found with ID: $id")
         }
     }
 }
 
-fun deleteNote() {
-    listNotes()
-    if (noteAPI.numberOfNotes() > 0) {
+
+fun deleteFilament(){
+    listFilaments()
+    if (filamentApi.numberOfFilaments() > 0) {
         // only ask the user to choose the note to delete if notes exist
         val id = readNextInt("Enter the id of the note to delete: ")
         // pass the index of the note to NoteAPI for deleting and check for success.
-        val noteToDelete = noteAPI.delete(id)
-        if (noteToDelete) {
+        val filamentToDelete = filamentApi.delete(id)
+        if (filamentToDelete) {
             println("Delete Successful!")
         } else {
             println("Delete NOT Successful")
         }
     }
 }
-
-fun archiveNote() {
-    listActiveNotes()
-    if (noteAPI.numberOfActiveNotes() > 0) {
-        // only ask the user to choose the note to archive if active notes exist
-        val id = readNextInt("Enter the id of the note to archive: ")
-        // pass the index of the note to NoteAPI for archiving and check for success.
-        if (noteAPI.archiveNote(id)) {
-            println("Archive Successful!")
-        } else {
-            println("Archive NOT Successful")
-        }
+fun searchFilamentBrand(){
+    val searchBrand = readNextLine("Enter the description to search by: ")
+    val searchResults = filamentApi.searchFilamentsByBrand(searchBrand)
+    if (searchResults.isEmpty()) {
+        println("No filaments found")
+    } else {
+        println(searchResults)
     }
 }
 
-//-------------------------------------------
-//ITEM MENU (only available for active notes)
-//-------------------------------------------
-private fun addItemToNote() {
-    val note: Note? = askUserToChooseActiveNote()
-    if (note != null) {
-        if (note.addItem(Item(itemContents = readNextLine("\t Item Contents: "))))
-            println("Add Successful!")
-        else println("Add NOT Successful")
-    }
-}
-
-fun updateItemContentsInNote() {
-    val note: Note? = askUserToChooseActiveNote()
-    if (note != null) {
-        val item: Item? = askUserToChooseItem(note)
-        if (item != null) {
-            val newContents = readNextLine("Enter new contents: ")
-            if (note.update(item.itemId, Item(itemContents = newContents))) {
-                println("Item contents updated")
-            } else {
-                println("Item contents NOT updated")
-            }
-        } else {
-            println("Invalid Item Id")
-        }
-    }
-}
-
-fun deleteAnItem() {
-    val note: Note? = askUserToChooseActiveNote()
-    if (note != null) {
-        val item: Item? = askUserToChooseItem(note)
-        if (item != null) {
-            val isDeleted = note.delete(item.itemId)
-            if (isDeleted) {
-                println("Delete Successful!")
-            } else {
-                println("Delete NOT Successful")
-            }
-        }
-    }
-}
-
-fun markItemStatus() {
-    val note: Note? = askUserToChooseActiveNote()
-    if (note != null) {
-        val item: Item? = askUserToChooseItem(note)
-       if (item != null) {
-                var changeStatus = 'X'
-                if (item.isItemComplete) {
-                    changeStatus = readNextChar("The item is currently complete...do you want to mark it as TODO?")
-                    if ((changeStatus == 'Y') ||  (changeStatus == 'y'))
-                        item.isItemComplete = false
-                }
-                else {
-                    changeStatus = readNextChar("The item is currently TODO...do you want to mark it as Complete?")
-                    if ((changeStatus == 'Y') ||  (changeStatus == 'y'))
-                        item.isItemComplete = true
-                }
-       }
+fun searchFilamentType(){
+    val searchType = readNextLine("Enter the description to search by: ")
+    val searchResults = filamentApi.searchFilamentsByType(searchType)
+    if (searchResults.isEmpty()) {
+        println("No filaments found")
+    } else {
+        println(searchResults)
     }
 }
 
@@ -235,77 +157,7 @@ fun changeMenu(){
         println("Change Failed")
     }
 }
-
-//------------------------------------
-//NOTE REPORTS MENU
-//------------------------------------
-fun searchNotes() {
-    val searchTitle = readNextLine("Enter the description to search by: ")
-    val searchResults = noteAPI.searchNotesByTitle(searchTitle)
-    if (searchResults.isEmpty()) {
-        println("No notes found")
-    } else {
-        println(searchResults)
-    }
-}
-
-//------------------------------------
-//ITEM REPORTS MENU
-//------------------------------------
-fun searchItems() {
-    val searchContents = readNextLine("Enter the item contents to search by: ")
-    val searchResults = noteAPI.searchItemByContents(searchContents)
-    if (searchResults.isEmpty()) {
-        println("No items found")
-    } else {
-        println(searchResults)
-    }
-}
-
-fun listToDoItems(){
-    if (noteAPI.numberOfToDoItems() > 0) {
-        println("Total TODO items: ${noteAPI.numberOfToDoItems()}")
-    }
-    println(noteAPI.listTodoItems())
-}
-
-
-//------------------------------------
-// Exit App
-//------------------------------------
 fun exitApp() {
-    println("Exiting...bye")
+    println("Exiting...bye for now")
     exitProcess(0)
-}
-
-//------------------------------------
-//HELPER FUNCTIONS
-//------------------------------------
-
-private fun askUserToChooseActiveNote(): Note? {
-    listActiveNotes()
-    if (noteAPI.numberOfActiveNotes() > 0) {
-        val note = noteAPI.findNote(readNextInt("\nEnter the id of the note: "))
-        if (note != null) {
-            if (note.isNoteArchived) {
-                println("Note is NOT Active, it is Archived")
-            } else {
-                return note //chosen note is active
-            }
-        } else {
-            println("Note id is not valid")
-        }
-    }
-    return null //selected note is not active
-}
-
-private fun askUserToChooseItem(note: Note): Item? {
-    if (note.numberOfItems() > 0) {
-        print(note.listItems())
-        return note.findOne(readNextInt("\nEnter the id of the item: "))
-    }
-    else{
-        println ("No items for chosen note")
-        return null
-    }
 }
