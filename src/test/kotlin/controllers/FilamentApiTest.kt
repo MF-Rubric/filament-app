@@ -46,7 +46,7 @@ class FilamentApiTest {
     @Nested
     inner class AddFilaments {
         @Test
-        fun `adding a Note to a populated list adds to ArrayList`() {
+        fun `adding a filament to a populated list adds to ArrayList`() {
             val newFilament = Filament(0,"creality", "PLA", "Purple", 3)
             assertEquals(5, populatedFilaments!!.numberOfFilaments())
             assertTrue(populatedFilaments!!.add(newFilament))
@@ -77,11 +77,11 @@ class FilamentApiTest {
         fun `listAllFilaments returns filaments when ArrayList has filaments stored`() {
             assertEquals(5, populatedFilaments!!.numberOfFilaments())
             val filamentsString = populatedFilaments!!.listAllFilaments()
-            assertTrue(filamentsString.contains("eSun"))
-            assertTrue(filamentsString.contains("flashForge"))
-            assertTrue(filamentsString.contains("ninjaFlex"))
-            assertTrue(filamentsString.contains("polyMaker"))
-            assertTrue(filamentsString.contains("eryone"))
+            assertTrue(filamentsString.contains("e-Sun"))
+            assertTrue(filamentsString.contains("flash-Forge"))
+            assertTrue(filamentsString.contains("ninja-Flex"))
+            assertTrue(filamentsString.contains("poly-Maker"))
+            assertTrue(filamentsString.contains("Eryone"))
         }
     }
 
@@ -90,9 +90,9 @@ class FilamentApiTest {
 
       //  @Test
         //fun `deleting a Filament that does not exist, returns null`() {
-           // assertNull(emptyFilaments!!.deleteFilament(0))
-            //assertNull(populatedFilaments!!.deleteFilament(-1))
-            //assertNull(populatedFilaments!!.deleteFilament(5))
+           // assertNull(emptyFilaments!!.delete(0))
+            //assertNull(populatedFilaments!!.delete(-1))
+            //assertNull(populatedFilaments!!.delete(5))
         //}
 
         //@Test
@@ -105,5 +105,30 @@ class FilamentApiTest {
 
        // }
    // }
+
+    @Nested
+    inner class UpdateFilaments {
+        @Test
+        fun `updating a filament that does not exist returns false`(){
+            assertFalse(populatedFilaments!!.update(6, Filament(6,"colorFabb",  "Nylon","Jade Green",3)))
+            assertFalse(populatedFilaments!!.update(-1, Filament(-1,"Hatchbox", "Flex", "Red", 1)))
+            assertFalse(emptyFilaments!!.update(0, Filament(0,"MatterHackers", "PVA", "Cyan",2 )))
+        }
+
+        @Test
+        fun `updating a filament that exists returns true and updates`() {
+            //check filament 5 exists and check the contents
+            assertEquals(eryone, populatedFilaments!!.findFilament(4))
+            assertEquals("eryone", populatedFilaments!!.findFilament(4)!!.filamentBrand)
+            assertEquals("ABS", populatedFilaments!!.findFilament(3)!!.filamentType)
+            assertEquals("Blue", populatedFilaments!!.findFilament(4)!!.filamentColor)
+
+            //update filament 5 with new information and ensure contents updated successfully
+            assertTrue(populatedFilaments!!.update(4, Filament(4, "RepRap", "TPU", "Blue",1)))
+            assertEquals("RepRap", populatedFilaments!!.findFilament(4)!!.filamentBrand)
+            assertEquals("TPU", populatedFilaments!!.findFilament(2)!!.filamentType)
+            assertEquals("Blue", populatedFilaments!!.findFilament(4)!!.filamentColor)
+        }
+    }
 
 }

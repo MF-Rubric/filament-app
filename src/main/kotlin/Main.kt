@@ -67,7 +67,8 @@ fun mainMenu(): Int { return readNextInt(menuColorManager.getColoredMenu(
 |  10) Sort Catalogue by Brand                                                    |
 ----------------------------------------------------------------------------------|
 | SETTINGS                                                                        |
-|   11) change menu color                                                         |
+|   11) Change Menu Color                                                         |
+|    0) Exit App                                                                  |
 -----------------------------------------------------------------------------------
 > ==>> 
  """.trimMargin(">")
@@ -120,7 +121,7 @@ fun deleteFilament() {
         // only ask the user to choose the filament to delete if filaments exist
         val id = readNextInt("Enter the id of the note to delete: ")
         // pass the index of the note to NoteAPI for deleting and check for success.
-        val filamentToDelete = filamentApi.deleteFilament(id)
+        val filamentToDelete = filamentApi.delete(id)
         if (filamentToDelete) {
             println("Delete Successful!")
         } else {

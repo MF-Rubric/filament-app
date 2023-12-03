@@ -16,7 +16,7 @@ class FilamentApi(serializerType: Serializer) {
         filament.filamentId = getId()
         return filaments.add(filament)
  }
-    fun deleteFilament (id:Int) = filaments.removeIf{ filament -> filament.filamentId ==id}
+    fun delete (id:Int) = filaments.removeIf{ filament -> filament.filamentId ==id}
 
     fun update(id: Int, filament: Filament?): Boolean {
 
