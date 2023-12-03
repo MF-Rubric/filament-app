@@ -2,6 +2,12 @@
 
 plugins {
     kotlin("jvm") version "1.9.0"
+    // Plugin for Dokka - KDoc generating tool
+    id("org.jetbrains.dokka") version "1.9.10"
+    // Code coverage tool
+    jacoco
+    // Plugin for Ktlint
+    id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
     application
 }
 

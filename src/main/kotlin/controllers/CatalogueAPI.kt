@@ -1,7 +1,7 @@
 package controllers
 import models.Catalogue
 import persistence.Serializer
-import utils.Utilities
+import utils. Utility
 import java.util.ArrayList
 
 class CatalogueAPI(serializerType: Serializer) {
@@ -34,7 +34,7 @@ class CatalogueAPI(serializerType: Serializer) {
 
     fun listAllInfo() =
         if (catalogues.isEmpty()) "no info stored"
-        else Utilities.formatListString(catalogues)
+        else  Utility.formatListString(catalogues)
 
     fun numberOfCatalogues():Int = catalogues.size
     fun findCatalogue(catalogueId : Int) =  catalogues.find{ filament -> filament.catalogueId == catalogueId }

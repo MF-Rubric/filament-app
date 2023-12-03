@@ -26,6 +26,9 @@ What was added at V3:
 
 What was added at V4:
 
+- Updated Utilities.kt
+- Added linting plugin to gradle.kts
+- 
 
 
 
