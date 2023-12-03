@@ -1,5 +1,6 @@
 package controllers
 import models.Filament
+
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
 import persistence.XMLSerializer
@@ -82,9 +83,27 @@ class FilamentApiTest {
             assertTrue(filamentsString.contains("polyMaker"))
             assertTrue(filamentsString.contains("eryone"))
         }
-
-
-
     }
+
+    //@Nested
+    //inner class DeleteFilaments {
+
+      //  @Test
+        //fun `deleting a Filament that does not exist, returns null`() {
+           // assertNull(emptyFilaments!!.deleteFilament(0))
+            //assertNull(populatedFilaments!!.deleteFilament(-1))
+            //assertNull(populatedFilaments!!.deleteFilament(5))
+        //}
+
+        //@Test
+        //fun `deleting a Filament that exists deletes and returns deleted object`() {
+           // assertEquals(5, populatedFilaments!!.numberOfFilaments())
+          //  assertEquals(eryone, populatedFilaments!!.deleteFilament(4))
+          //  assertEquals(4, populatedFilaments!!.numberOfFilaments())
+          //  assertEquals(eSun, populatedFilaments!!.deleteFilament(0))
+          //  assertEquals(3, populatedFilaments!!.numberOfFilaments())
+
+       // }
+   // }
 
 }

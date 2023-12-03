@@ -1,22 +1,26 @@
 <object-stream>
     <list>
         <models.Filament>
-            <filamentBrand>Test App</filamentBrand>
-            <filamentType>Test App</filamentType>
-            <filamentColor>Test App</filamentColor>
-            <filamentQuantity>Work</filamentQuantity>
+            <filamentBrand>polyMaker</filamentBrand>
+            <filamentType>ABS</filamentType>
+            <filamentColor>Brown</filamentColor>
+            <filamentQuantity>1</filamentQuantity>
 
         </models.Filament>
         <models.Filament>
-            <filamentBrand>Swim - Pool</filamentBrand>
 
-            <noteCategory>Hobby</noteCategory>
+            <filamentBrand>eryone</filamentBrand>
+            <filamentType>PETG</filamentType>
+            <filamentColor>Blue</filamentColor>
+            <filamentQuantity>1</filamentQuantity>
 
         </models.Filament>
         <models.Filament>
-            <filamentBrand>Summer Holiday to France</filamentBrand>
 
-            <filamentCategory>Holiday</filamentCategory>
+            <filamentBrand>flashForge</filamentBrand>
+            <filamentType>PLA</filamentType>
+            <filamentColor>Orange</filamentColor>
+            <filamentQuantity>2</filamentQuantity>
 
         </models.Filament>
     </list>

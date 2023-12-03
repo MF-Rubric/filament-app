@@ -38,6 +38,9 @@ fun runMenu() {
         }
     } while (true)
 }
+
+
+
 fun mainMenu(): Int { return readNextInt(menuColorManager.getColoredMenu(
     """ 
 > ---------------------------------------------------------------------------------
@@ -111,13 +114,13 @@ fun updateFilament(){
 }
 
 
-fun deleteFilament(){
+fun deleteFilament() {
     listFilaments()
     if (filamentApi.numberOfFilaments() > 0) {
-        // only ask the user to choose the note to delete if notes exist
+        // only ask the user to choose the filament to delete if filaments exist
         val id = readNextInt("Enter the id of the note to delete: ")
         // pass the index of the note to NoteAPI for deleting and check for success.
-        val filamentToDelete = filamentApi.delete(id)
+        val filamentToDelete = filamentApi.deleteFilament(id)
         if (filamentToDelete) {
             println("Delete Successful!")
         } else {
@@ -125,39 +128,40 @@ fun deleteFilament(){
         }
     }
 }
-fun searchFilamentBrand(){
-    val searchBrand = readNextLine("Enter the description to search by: ")
-    val searchResults = filamentApi.searchFilamentsByBrand(searchBrand)
-    if (searchResults.isEmpty()) {
-        println("No filaments found")
-    } else {
-        println(searchResults)
+    fun searchFilamentBrand() {
+        val searchBrand = readNextLine("Enter the description to search by: ")
+        val searchResults = filamentApi.searchFilamentsByBrand(searchBrand)
+        if (searchResults.isEmpty()) {
+            println("No filaments found")
+        } else {
+            println(searchResults)
+        }
     }
-}
 
-fun searchFilamentType(){
-    val searchType = readNextLine("Enter the description to search by: ")
-    val searchResults = filamentApi.searchFilamentsByType(searchType)
-    if (searchResults.isEmpty()) {
-        println("No filaments found")
-    } else {
-        println(searchResults)
+    fun searchFilamentType() {
+        val searchType = readNextLine("Enter the description to search by: ")
+        val searchResults = filamentApi.searchFilamentsByType(searchType)
+        if (searchResults.isEmpty()) {
+            println("No filaments found")
+        } else {
+            println(searchResults)
+        }
     }
-}
 
-fun changeMenu(){
-    //logger.info { "changeColour() function invoked" }
-    val colorChoice = readNextLine("Enter the name of a Color: ")
-    menuColorManager.changeColor(colorChoice)
-    val isChanged = menuAPI.change(Menu(colorChoice))
+    fun changeMenu() {
+        //logger.info { "changeColour() function invoked" }
+        val colorChoice = readNextLine("Enter the name of a Color: ")
+        menuColorManager.changeColor(colorChoice)
+        val isChanged = menuAPI.change(Menu(colorChoice))
 
-    if (isChanged) {
-        println("Change Successfully")
-    } else {
-        println("Change Failed")
+        if (isChanged) {
+            println("Change Successfully")
+        } else {
+            println("Change Failed")
+        }
     }
-}
-fun exitApp() {
-    println("Exiting...bye for now")
-    exitProcess(0)
-}
+
+    fun exitApp() {
+        println("Exiting...bye for now")
+        exitProcess(0)
+    }
