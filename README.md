@@ -19,10 +19,10 @@ What was added at V2:
 - ReadMe text file added
 
 What was added at V3:
-(Forgot to add this as a release)
-- Ability to Add, list, Update and Delete, and in the catalogue collection
-- Persistence of filaments to/from XML/JSON
-- Updated ReadMe file
+
+- Added new collection and API called catalogue
+- Ability to Add, list, Update and Delete, in the catalogue collection
+- Reupdated ReadMe file
 
 What was added at V4:
 
