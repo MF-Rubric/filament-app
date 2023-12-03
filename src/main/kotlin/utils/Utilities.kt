@@ -1,5 +1,5 @@
 package utils
-
+import models.Catalogue
 import models.Filament
 
 
@@ -11,5 +11,8 @@ object Utilities {
         filamentsToFormat
             .joinToString(separator = "\n") { filament ->  "$filament" }
 
-
+    @JvmStatic
+    fun formatListString(cataloguesToFormat: List<Catalogue>): String =
+        cataloguesToFormat
+            .joinToString(separator = "\n") { catalogue ->  "$catalogue" }
 }
