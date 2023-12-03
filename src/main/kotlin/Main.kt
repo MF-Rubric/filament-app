@@ -3,14 +3,19 @@ import controllers.MenuAPI
 import controllers.FilamentApi
 import models.Filament
 import models.Menu
+import persistence.JSONSerializer
+import persistence.XMLSerializer
 import utils.MenuColorManager
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
 import utils.ScannerInput
+import java.io.File
 import kotlin.system.exitProcess
 
-private val filamentApi = FilamentApi()
+
 private val menuAPI = MenuAPI()
+//private val filamentApi = FilamentApi(XMLSerializer(File("filament.xml")))
+private val filamentApi = FilamentApi(JSONSerializer(File("filaments.json")))
 val menuColorManager = MenuColorManager()
 fun main() = runMenu()
 
@@ -33,6 +38,9 @@ fun runMenu() {
         }
     } while (true)
 }
+
+
+
 fun mainMenu(): Int { return readNextInt(menuColorManager.getColoredMenu(
     """ 
 > ---------------------------------------------------------------------------------
@@ -59,7 +67,8 @@ fun mainMenu(): Int { return readNextInt(menuColorManager.getColoredMenu(
 |  10) Sort Catalogue by Brand                                                    |
 ----------------------------------------------------------------------------------|
 | SETTINGS                                                                        |
-|   11) change menu color                                                         |
+|   11) Change Menu Color                                                         |
+|    0) Exit App                                                                  |
 -----------------------------------------------------------------------------------
 > ==>> 
  """.trimMargin(">")
@@ -70,9 +79,7 @@ fun addFilament() {
     val filamentType = readNextLine("Enter the type of filament (PLA,TPU,PETG,ABS, etc): ")
     val filamentColor = readNextLine("Enter the color of filament: ")
     val filamentQuantity = readNextInt("Enter the quantity of filament: ")
-    val filamentWeight = readNextLine("Enter the weight of filament (0.5/1/3/5 kg):  ")
-    val filamentPrice = readNextInt("Enter the price of filament: ")
-    val isAdded = filamentApi.add(Filament(filamentBrand = filamentBrand, filamentType = filamentType, filamentColor = filamentColor, filamentQuantity = filamentQuantity, filamentWeight = filamentWeight, filamentPrice = filamentPrice))
+    val isAdded = filamentApi.add(Filament(filamentBrand = filamentBrand, filamentType = filamentType, filamentColor = filamentColor, filamentQuantity = filamentQuantity))
 
     if (isAdded) {
         println("Added Successfully")
@@ -95,11 +102,8 @@ fun updateFilament(){
             val filamentType = readNextLine("Enter the type of filament: ")
             val filamentColor = readNextLine("Enter the color of filament: ")
             val filamentQuantity = readNextInt("Enter the quantity of filament: ")
-            val filamentWeight = readNextLine("Enter the weight of filament: ")
-            val filamentPrice = readNextInt("Enter the price of filament: ")
 
-
-            if (filamentApi.update(id, Filament(0, filamentBrand, filamentType, filamentColor, filamentQuantity, filamentWeight, filamentPrice))){
+            if (filamentApi.update(id, Filament(0, filamentBrand, filamentType, filamentColor, filamentQuantity))){
                 println("Update Successful")
             } else {
                 println("Update Failed")
@@ -111,10 +115,10 @@ fun updateFilament(){
 }
 
 
-fun deleteFilament(){
+fun deleteFilament() {
     listFilaments()
     if (filamentApi.numberOfFilaments() > 0) {
-        // only ask the user to choose the note to delete if notes exist
+        // only ask the user to choose the filament to delete if filaments exist
         val id = readNextInt("Enter the id of the note to delete: ")
         // pass the index of the note to NoteAPI for deleting and check for success.
         val filamentToDelete = filamentApi.delete(id)
@@ -125,39 +129,40 @@ fun deleteFilament(){
         }
     }
 }
-fun searchFilamentBrand(){
-    val searchBrand = readNextLine("Enter the description to search by: ")
-    val searchResults = filamentApi.searchFilamentsByBrand(searchBrand)
-    if (searchResults.isEmpty()) {
-        println("No filaments found")
-    } else {
-        println(searchResults)
+    fun searchFilamentBrand() {
+        val searchBrand = readNextLine("Enter the description to search by: ")
+        val searchResults = filamentApi.searchFilamentsByBrand(searchBrand)
+        if (searchResults.isEmpty()) {
+            println("No filaments found")
+        } else {
+            println(searchResults)
+        }
     }
-}
 
-fun searchFilamentType(){
-    val searchType = readNextLine("Enter the description to search by: ")
-    val searchResults = filamentApi.searchFilamentsByType(searchType)
-    if (searchResults.isEmpty()) {
-        println("No filaments found")
-    } else {
-        println(searchResults)
+    fun searchFilamentType() {
+        val searchType = readNextLine("Enter the description to search by: ")
+        val searchResults = filamentApi.searchFilamentsByType(searchType)
+        if (searchResults.isEmpty()) {
+            println("No filaments found")
+        } else {
+            println(searchResults)
+        }
     }
-}
 
-fun changeMenu(){
-    //logger.info { "changeColour() function invoked" }
-    val colorChoice = readNextLine("Enter the name of a Color: ")
-    menuColorManager.changeColor(colorChoice)
-    val isChanged = menuAPI.change(Menu(colorChoice))
+    fun changeMenu() {
+        //logger.info { "changeColour() function invoked" }
+        val colorChoice = readNextLine("Enter the name of a Color: ")
+        menuColorManager.changeColor(colorChoice)
+        val isChanged = menuAPI.change(Menu(colorChoice))
 
-    if (isChanged) {
-        println("Change Successfully")
-    } else {
-        println("Change Failed")
+        if (isChanged) {
+            println("Change Successfully")
+        } else {
+            println("Change Failed")
+        }
     }
-}
-fun exitApp() {
-    println("Exiting...bye for now")
-    exitProcess(0)
-}
+
+    fun exitApp() {
+        println("Exiting...bye for now")
+        exitProcess(0)
+    }

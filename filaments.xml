@@ -1,0 +1,27 @@
+<object-stream>
+    <list>
+        <models.Filament>
+            <filamentBrand>polyMaker</filamentBrand>
+            <filamentType>ABS</filamentType>
+            <filamentColor>Brown</filamentColor>
+            <filamentQuantity>1</filamentQuantity>
+
+        </models.Filament>
+        <models.Filament>
+
+            <filamentBrand>eryone</filamentBrand>
+            <filamentType>PETG</filamentType>
+            <filamentColor>Blue</filamentColor>
+            <filamentQuantity>1</filamentQuantity>
+
+        </models.Filament>
+        <models.Filament>
+
+            <filamentBrand>flashForge</filamentBrand>
+            <filamentType>PLA</filamentType>
+            <filamentColor>Orange</filamentColor>
+            <filamentQuantity>2</filamentQuantity>
+
+        </models.Filament>
+    </list>
+</object-stream>

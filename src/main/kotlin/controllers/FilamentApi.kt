@@ -2,8 +2,11 @@ package controllers
 import models.Filament
 import java.util.ArrayList
 import utils.Utilities.formatListString
+import persistence.Serializer
 
-class FilamentApi (){
+class FilamentApi(serializerType: Serializer) {
+
+    private var serializer: Serializer = serializerType
  private var filaments = ArrayList<Filament>()
 
     private var lastId = 0
@@ -13,7 +16,7 @@ class FilamentApi (){
         filament.filamentId = getId()
         return filaments.add(filament)
  }
-    fun delete(id:Int) = filaments.removeIf{filament -> filament.filamentId ==id}
+    fun delete (id:Int) = filaments.removeIf{ filament -> filament.filamentId ==id}
 
     fun update(id: Int, filament: Filament?): Boolean {
 
@@ -25,8 +28,7 @@ class FilamentApi (){
             foundFilament.filamentType = filament.filamentType
             foundFilament.filamentColor = filament.filamentColor
             foundFilament.filamentQuantity = filament.filamentQuantity
-            foundFilament.filamentWeight = filament.filamentWeight
-            foundFilament.filamentPrice = filament.filamentPrice
+
             return true
         }
 
@@ -38,10 +40,10 @@ class FilamentApi (){
 
 
     fun listAllFilaments() =
-        if (filaments.isEmpty()) "No notes stored"
+        if (filaments.isEmpty()) "no filaments stored"
         else formatListString(filaments)
 
-    fun numberOfFilaments() = filaments.size
+    fun numberOfFilaments():Int = filaments.size
 
     //searching
     fun findFilament(filamentId : Int) =  filaments.find{ filament -> filament.filamentId == filamentId }
