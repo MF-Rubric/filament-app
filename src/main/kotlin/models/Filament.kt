@@ -1,5 +1,5 @@
 package models
-//import utils.Utilities
+import utils.Utilities
 
 data class Filament(
     var filamentId: Int= 0, // Unique identifier for the filament
@@ -7,8 +7,6 @@ data class Filament(
     var filamentType: String, // Type of filament (e.g., PLA, ABS)
     var filamentColor: String, // The pigment of the filament
     var filamentQuantity: Int, // Quantity available in stock
-    var filamentWeight: String, // Weight of the spool
-    var filamentPrice: Int // Cost per unit
+
+
 )
-//private var lastItemId = 0
-//private fun getItemId() = lastItemId++

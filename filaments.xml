@@ -1,0 +1,23 @@
+<object-stream>
+    <list>
+        <models.Filament>
+            <filamentBrand>Test App</filamentBrand>
+            <filamentType>Test App</filamentType>
+            <filamentColor>Test App</filamentColor>
+            <filamentQuantity>Work</filamentQuantity>
+
+        </models.Filament>
+        <models.Filament>
+            <filamentBrand>Swim - Pool</filamentBrand>
+
+            <noteCategory>Hobby</noteCategory>
+
+        </models.Filament>
+        <models.Filament>
+            <filamentBrand>Summer Holiday to France</filamentBrand>
+
+            <filamentCategory>Holiday</filamentCategory>
+
+        </models.Filament>
+    </list>
+</object-stream>

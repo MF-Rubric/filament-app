@@ -3,14 +3,19 @@ import controllers.MenuAPI
 import controllers.FilamentApi
 import models.Filament
 import models.Menu
+import persistence.JSONSerializer
+import persistence.XMLSerializer
 import utils.MenuColorManager
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
 import utils.ScannerInput
+import java.io.File
 import kotlin.system.exitProcess
 
-private val filamentApi = FilamentApi()
+
 private val menuAPI = MenuAPI()
+//private val filamentApi = FilamentApi(XMLSerializer(File("filament.xml")))
+private val filamentApi = FilamentApi(JSONSerializer(File("filaments.json")))
 val menuColorManager = MenuColorManager()
 fun main() = runMenu()
 
@@ -70,9 +75,7 @@ fun addFilament() {
     val filamentType = readNextLine("Enter the type of filament (PLA,TPU,PETG,ABS, etc): ")
     val filamentColor = readNextLine("Enter the color of filament: ")
     val filamentQuantity = readNextInt("Enter the quantity of filament: ")
-    val filamentWeight = readNextLine("Enter the weight of filament (0.5/1/3/5 kg):  ")
-    val filamentPrice = readNextInt("Enter the price of filament: ")
-    val isAdded = filamentApi.add(Filament(filamentBrand = filamentBrand, filamentType = filamentType, filamentColor = filamentColor, filamentQuantity = filamentQuantity, filamentWeight = filamentWeight, filamentPrice = filamentPrice))
+    val isAdded = filamentApi.add(Filament(filamentBrand = filamentBrand, filamentType = filamentType, filamentColor = filamentColor, filamentQuantity = filamentQuantity))
 
     if (isAdded) {
         println("Added Successfully")
@@ -95,11 +98,8 @@ fun updateFilament(){
             val filamentType = readNextLine("Enter the type of filament: ")
             val filamentColor = readNextLine("Enter the color of filament: ")
             val filamentQuantity = readNextInt("Enter the quantity of filament: ")
-            val filamentWeight = readNextLine("Enter the weight of filament: ")
-            val filamentPrice = readNextInt("Enter the price of filament: ")
 
-
-            if (filamentApi.update(id, Filament(0, filamentBrand, filamentType, filamentColor, filamentQuantity, filamentWeight, filamentPrice))){
+            if (filamentApi.update(id, Filament(0, filamentBrand, filamentType, filamentColor, filamentQuantity))){
                 println("Update Successful")
             } else {
                 println("Update Failed")
