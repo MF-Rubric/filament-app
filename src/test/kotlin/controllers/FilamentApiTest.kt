@@ -77,10 +77,10 @@ class FilamentApiTest {
         fun `listAllFilaments returns filaments when ArrayList has filaments stored`() {
             assertEquals(5, populatedFilaments!!.numberOfFilaments())
             val filamentsString = populatedFilaments!!.listAllFilaments()
-            assertTrue(filamentsString.contains("e-Sun"))
-            assertTrue(filamentsString.contains("flash-Forge"))
-            assertTrue(filamentsString.contains("ninja-Flex"))
-            assertTrue(filamentsString.contains("poly-Maker"))
+            assertTrue(filamentsString.contains("eSun"))
+            assertTrue(filamentsString.contains("flashForge"))
+            assertTrue(filamentsString.contains("ninjaFlex"))
+            assertTrue(filamentsString.contains("polyMaker"))
             assertTrue(filamentsString.contains("Eryone"))
         }
     }

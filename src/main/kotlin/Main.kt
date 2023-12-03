@@ -229,8 +229,8 @@ fun updateCatalogue(){
             // Getting new details from the user
             val catalogueBrand = readNextLine("Enter the brand of filament: ")
             val catalogueComponent = readNextLine("Enter the Type of material used to make the filament:")
-            val cataloguePrintTemp = readNextLine("Enter the color of filament: ")
-            val catalogueBedTemp = readNextLine("Enter the quantity of filament: ")
+            val cataloguePrintTemp = readNextLine("Enter the the optimal printing temperature for filament: ")
+            val catalogueBedTemp = readNextLine("Enter the optimal bed printing temperature for filament: ")
 
             // Updating the catalogue using CatalogueAPI
             if (catalogueAPI.updateCatalogue(id, Catalogue(0, catalogueBrand, catalogueComponent, cataloguePrintTemp, catalogueBedTemp))){
